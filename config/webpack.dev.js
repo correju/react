@@ -2,13 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
-    entry: ['@babel/polyfill', './app/app.js'],
+    entry: ['./app/main.js'],
     mode: 'development',
     output: {
         filename: 'verrdi.[name].js',
         path: path.resolve(__dirname, '../dist'),
         publicPath: "/"
     },
+    resolve: { extensions: ['.js', '.jsx'] },
     devServer: {
         contentBase: "dist",
         hot: true,
@@ -18,7 +19,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 use: [
                     {loader: 'babel-loader'},
                 ],
@@ -28,7 +29,22 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     {loader: 'style-loader'},
-                    {loader: 'css-loader'}
+                    {
+                        loader: 'css-loader',
+                        query: {
+                            modules: true
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.sass$/,
+                use: [
+                    {loader: 'style-loader'},
+                    {
+                        loader: 'css-loader',
+                    },
+                    {loader: 'sass-loader'}
                 ]
             },
             {

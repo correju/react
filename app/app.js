@@ -1,5 +1,11 @@
-require('@babel/runtime/regenerator');
-require('webpack-hot-middleware/client?reload=true');
-require('@babel/polyfill');
-require('./styles/index.css');
-require('./index.html');
+import React from 'react';
+import ReactDom from 'react-dom';
+import HotLoader from './components/hotLoader'
+
+function render (Component) {
+    ReactDom.render(
+        <Component />,
+        document.getElementById('react-root')
+    )
+}
+render(HotLoader);
