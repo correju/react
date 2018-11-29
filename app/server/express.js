@@ -4,7 +4,6 @@ import 'webpack-dev-middleware';
 
 
 const port = process.env.PORT || 8080;
-
 const webpack = require('webpack');
 const config = require('../../config/webpack.dev');
 const compiler = webpack(config);
