@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config=config/webpack.dev.js",
+    "dev": "node app/server/main.js",
     "build": "webpack --config=config/webpack.dev.js",
     "test": "npm test"
   },
@@ -24,9 +25,13 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/polyfill": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.1.5",
     "css-loader": "^1.0.1",
+    "express": "^4.16.4",
     "style-loader": "^0.23.1",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-middleware": "^3.4.0",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-hot-middleware": "^2.24.3"
   }
 }
