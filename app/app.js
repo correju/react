@@ -1,11 +1,18 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import HotLoader from './components/hotLoader'
+import Data  from '../data/bio';
+import RootApp from './components/AppRoot';
 
-function render (Component) {
+const render = (Component) => {
     ReactDom.render(
-        <Component />,
+        <Component heading={Data.heading} content={Data.bioText} />,
         document.getElementById('react-root')
     )
 }
-render(HotLoader);
+
+if (process.env.NODE_ENV === "development") {
+    render(HotLoader);
+} else {
+    render(RootApp);
+}

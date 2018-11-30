@@ -1,3 +1,30 @@
-.counter {
-    background-color: red;
+body{
+    margin: 0;
+    background-color: #444;
+    font-family: sans-serif;
+}
+.profile{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+h1{
+    font-size: 5rem;
+}
+.profile-image{
+    border-radius: 100%;
+    width: 300px;
+    height: 300px;
+    border: 0.3rem solid white;
+}
+.main-title{
+    color: white;
+    text-shadow: 0 0 20px black;
+}
+.content {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
 }

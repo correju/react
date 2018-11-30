@@ -1,27 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CopressionPlugin = require('compression-webpack-plugin');
+const BrotliPlugin = require('brotli-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+
 module.exports = {
-    entry: [
-        '@babel/runtime/regenerator',
-        'react-hot-loader/patch',
-        '@babel/register',
-        'webpack-hot-middleware/client?reload=true',
-        '@babel/polyfill',
-        './app/main.js'
-    ],
-    mode: 'development',
+    entry: ['./app/main.js'],
+    mode: 'production',
     output: {
         filename: 'verrdi.[name].js',
         path: path.resolve(__dirname, '../dist'),
         publicPath: "/"
     },
     resolve: { extensions: ['.js', '.jsx'] },
-    devServer: {
-        contentBase: "dist",
-        hot: true,
-        overlay: true,
-    },
     devtool: 'source-map',
     module: {
         rules: [
@@ -35,14 +29,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'style-loader'},
+                    {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader'}
                 ]
             },
             {
                 test: /\.sass$/,
                 use: [
-                    {loader: 'style-loader'},
+                    {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader'},
                     {loader: 'sass-loader'}
                 ]
@@ -77,14 +71,28 @@ module.exports = {
             }
         ]
     },
+    optimization: {
+        minimizer: [new TerserPlugin({
+            cache: true,
+            parallel: true,
+            sourceMap: false
+        })]
+    },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
+        new OptimizeCssAssetsWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name]-[contenthash].css"
+        }),
         new HtmlWebpackPlugin({
             template: './app/index.html'
         }),
+        new CopressionPlugin({
+            algorithm: 'gzip'
+        }),
+        new BrotliPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify("development")
+                NODE_ENV: JSON.stringify("production")
             }
         })
     ]
