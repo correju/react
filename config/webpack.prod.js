@@ -76,7 +76,17 @@ module.exports = {
             cache: true,
             parallel: true,
             sourceMap: false
-        })]
+        })],
+        splitChunks: {
+            chunks: "all",
+            cacheGroups: {
+                vendor: {
+                    name: 'vendor',
+                    chunks: 'initial',
+                    minChunks: 2
+                }
+            }
+        }
     },
     plugins: [
         new OptimizeCssAssetsWebpackPlugin(),
