@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import HotLoader from './components/hotLoader'
 import Data  from '../data/bio';
-import RootApp from './components/AppRoot';
+import AppRoot from './components/AppRoot';
 
 const render = (Component) => {
-    ReactDom.render(
-        <Component heading={Data.heading} content={Data.bioText} />,
+    ReactDom.hydrate(
+        <Component />,
         document.getElementById('react-root')
     )
 }
@@ -14,5 +14,5 @@ const render = (Component) => {
 if (process.env.NODE_ENV === "development") {
     render(HotLoader);
 } else {
-    render(RootApp);
+    render(AppRoot);
 }

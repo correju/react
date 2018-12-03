@@ -1,7 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = {
+    name: 'client',
     entry: [
         '@babel/runtime/regenerator',
         'react-hot-loader/patch',
@@ -35,14 +38,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'style-loader'},
+                    {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader'}
                 ]
             },
             {
                 test: /\.sass$/,
                 use: [
-                    {loader: 'style-loader'},
+                    {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader'},
                     {loader: 'sass-loader'}
                 ]
@@ -91,13 +94,16 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new HtmlWebpackPlugin({
-            template: './app/index.html'
-        }),
+        // new HtmlWebpackPlugin({
+        //     template: './app/index.html'
+        // }),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify("development")
             }
-        })
+        }),
+        new MiniCssExtractPlugin({
+            filename: "[name].css"
+        }),
     ]
 };

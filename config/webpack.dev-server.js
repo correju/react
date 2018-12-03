@@ -1,20 +1,18 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const CopressionPlugin = require('compression-webpack-plugin');
-const BrotliPlugin = require('brotli-webpack-plugin');
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-
+const nodeExternals = require('webpack-node-externals');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
-    entry: ['./app/main.js'],
+    name: 'server',
+    entry: './app/server/render.js',
     mode: 'production',
     output: {
-        filename: 'verrdi.[name].js',
-        path: path.resolve(__dirname, '../dist'),
-        publicPath: "/"
+        filename: 'verrdi.server.js',
+        path: path.resolve(__dirname, '../build'),
+        libraryTarget: 'commonjs2'
     },
+    target: 'node',
+    externals: nodeExternals(),
     resolve: { extensions: ['.js', '.jsx'] },
     devtool: 'source-map',
     module: {
@@ -47,7 +45,8 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'img/[name]-[hash:8].[ext]'
+                            name: 'img/[name]-[hash:8].[ext]',
+                            emitFile: false
                         }
                     },
                 ]
@@ -66,44 +65,19 @@ module.exports = {
             {
                 test: /\.md$/,
                 use: [
-                    {loader: "markdown-with-front-matter-loader"}
+                  { loader: "markdown-with-front-matter-loader"}
                 ]
             }
         ]
     },
-    optimization: {
-        minimizer: [new TerserPlugin({
-            cache: true,
-            parallel: true,
-            sourceMap: false
-        })],
-        splitChunks: {
-            chunks: "all",
-            cacheGroups: {
-                vendor: {
-                    name: 'vendor',
-                    chunks: 'initial',
-                    minChunks: 2
-                }
-            }
-        }
-    },
     plugins: [
-        new OptimizeCssAssetsWebpackPlugin(),
-        new MiniCssExtractPlugin({
-            filename: "[name]-[contenthash].css"
-        }),
-        new HtmlWebpackPlugin({
-            template: './app/index.html'
-        }),
-        new CopressionPlugin({
-            algorithm: 'gzip'
-        }),
-        new BrotliPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify("production")
+                NODE_ENV: JSON.stringify("development")
             }
-        })
+        }),
+        new MiniCssExtractPlugin({
+            filename: "[name].css"
+        }),
     ]
 };

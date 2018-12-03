@@ -1,17 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CopressionPlugin = require('compression-webpack-plugin');
+const BrotliPlugin = require('brotli-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+
 module.exports = {
-    entry: ['./app/server/main.js'],
+    name: 'client',
+    entry: ['./app/main.js'],
     mode: 'production',
     output: {
-        filename: 'verrdi.server.[name].js',
-        path: path.resolve(__dirname, '../build'),
+        filename: 'verrdi.[name].js',
+        path: path.resolve(__dirname, '../dist'),
         publicPath: "/"
     },
-    target: 'node',
-    externals: nodeExternals(),
     resolve: { extensions: ['.js', '.jsx'] },
     devtool: 'source-map',
     module: {
@@ -68,14 +72,39 @@ module.exports = {
             }
         ]
     },
+    optimization: {
+        minimizer: [new TerserPlugin({
+            cache: true,
+            parallel: true,
+            sourceMap: false
+        })],
+        splitChunks: {
+            chunks: "all",
+            cacheGroups: {
+                vendor: {
+                    name: 'vendor',
+                    chunks: 'initial',
+                    minChunks: 2
+                }
+            }
+        }
+    },
     plugins: [
+        new OptimizeCssAssetsWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name]-[contenthash].css"
+        }),
+        new HtmlWebpackPlugin({
+            template: './app/index.html'
+        }),
+        new CopressionPlugin({
+            algorithm: 'gzip'
+        }),
+        new BrotliPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify("production")
             }
-        }),
-        new MiniCssExtractPlugin({
-            filename: "[name]-[contenthash].css"
-        }),
+        })
     ]
 };
