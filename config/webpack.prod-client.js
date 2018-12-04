@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CopressionPlugin = require('compression-webpack-plugin');
@@ -92,11 +92,11 @@ module.exports = {
     plugins: [
         new OptimizeCssAssetsWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: "[name]-[contenthash].css"
+            filename: "[name].css"
         }),
-        new HtmlWebpackPlugin({
-            template: './app/index.html'
-        }),
+        // new HtmlWebpackPlugin({
+        //     template: './app/index.html'
+        // }),
         new CopressionPlugin({
             algorithm: 'gzip'
         }),

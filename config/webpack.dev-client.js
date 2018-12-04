@@ -16,6 +16,7 @@ module.exports = {
     mode: 'development',
     output: {
         filename: 'verrdi.[name].js',
+        chunkFilename: 'verrdi.[name].js',
         path: path.resolve(__dirname, '../dist'),
         publicPath: "/"
     },
@@ -56,7 +57,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'img/[name]-[hash:8].[ext]'
+                            name: 'img/[name].[ext]'
                         }
                     },
                 ]

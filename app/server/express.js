@@ -29,7 +29,7 @@ if (!isProd) {
     server.use(expressStaticGzip('dist', {
         enableBrotli: true
     }));
-    server.use(render())
+    server.get('*', render())
 }
 
 
