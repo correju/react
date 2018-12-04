@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const externals = require('./node-externals');
 module.exports = {
     name: 'server',
     entry: './app/server/render.js',
@@ -12,7 +11,7 @@ module.exports = {
         libraryTarget: 'commonjs2'
     },
     target: 'node',
-    externals: nodeExternals(),
+    externals,
     resolve: { extensions: ['.js', '.jsx'] },
     devtool: 'source-map',
     module: {
@@ -27,14 +26,12 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader'}
                 ]
             },
             {
                 test: /\.sass$/,
                 use: [
-                    {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader'},
                     {loader: 'sass-loader'}
                 ]
@@ -45,7 +42,8 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'img/[name]-[hash:8].[ext]'
+                            name: 'img/[name]-[hash:8].[ext]',
+                            emitFile: false
                         }
                     },
                 ]
@@ -75,8 +73,8 @@ module.exports = {
                 NODE_ENV: JSON.stringify("production")
             }
         }),
-        new MiniCssExtractPlugin({
-            filename: "[name].css"
-        }),
+        new webpack.optimize.LimitChunkCountPlugin({
+            maxChunks: 1
+        })
     ]
 };

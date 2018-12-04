@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -95,16 +94,13 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        // new HtmlWebpackPlugin({
-        //     template: './app/index.html'
-        // }),
+        new MiniCssExtractPlugin({
+            filename: "[name].css"
+        }),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify("development")
             }
-        }),
-        new MiniCssExtractPlugin({
-            filename: "[name].css"
-        }),
+        })
     ]
 };

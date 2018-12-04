@@ -1,6 +1,6 @@
 import React from 'react';
 const getBundle = () => {
-    import(/* webpackChunkName: "lodash" */ 'lodash').then(_ => {
+    import('lodash').then(_ => {
         console.log(_.isArray([1,2,3,4]));
     });
 };

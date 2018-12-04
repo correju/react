@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CopressionPlugin = require('compression-webpack-plugin');
@@ -13,6 +12,7 @@ module.exports = {
     mode: 'production',
     output: {
         filename: 'verrdi.[name].js',
+        chunkFilename: 'verrdi.[name].js',
         path: path.resolve(__dirname, '../dist'),
         publicPath: "/"
     },
@@ -79,7 +79,7 @@ module.exports = {
             sourceMap: false
         })],
         splitChunks: {
-            chunks: "all",
+            chunks: 'all',
             cacheGroups: {
                 vendor: {
                     name: 'vendor',
@@ -94,9 +94,6 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "[name].css"
         }),
-        // new HtmlWebpackPlugin({
-        //     template: './app/index.html'
-        // }),
         new CopressionPlugin({
             algorithm: 'gzip'
         }),
