@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const ExtraCssChunks = require('extract-css-chunks-webpack-plugin');
 module.exports = {
     name: 'client',
     entry: [
@@ -38,14 +38,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: MiniCssExtractPlugin.loader},
+                    {loader: ExtraCssChunks.loader},
                     {loader: 'css-loader'}
                 ]
             },
             {
                 test: /\.sass$/,
                 use: [
-                    {loader: MiniCssExtractPlugin.loader},
+                    {loader: ExtraCssChunks.loader},
                     {loader: 'css-loader'},
                     {loader: 'sass-loader'}
                 ]
@@ -94,8 +94,8 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new MiniCssExtractPlugin({
-            filename: "[name].css"
+        new ExtraCssChunks({
+            hot: true
         }),
         new webpack.DefinePlugin({
             'process.env': {

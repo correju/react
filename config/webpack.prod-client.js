@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
+const ExtraCssChunks = require('extract-css-chunks-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CopressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
@@ -30,14 +31,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: MiniCssExtractPlugin.loader},
+                    {loader: ExtraCssChunks.loader},
                     {loader: 'css-loader'}
                 ]
             },
             {
                 test: /\.sass$/,
                 use: [
-                    {loader: MiniCssExtractPlugin.loader},
+                    {loader: ExtraCssChunks.loader},
                     {loader: 'css-loader'},
                     {loader: 'sass-loader'}
                 ]
@@ -91,9 +92,7 @@ module.exports = {
     },
     plugins: [
         new OptimizeCssAssetsWebpackPlugin(),
-        new MiniCssExtractPlugin({
-            filename: "[name].css"
-        }),
+        new ExtraCssChunks(),
         new CopressionPlugin({
             algorithm: 'gzip'
         }),

@@ -12,7 +12,18 @@ import configProdServer  from '../../config/webpack.prod-server';
 const isProd = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 8080;
 const server = express();
-
+let isBuilt = false
+const done = () => {
+    !isBuilt &&
+      server.listen(port, () => {
+        isBuilt = true
+        console.log(
+          `Server listening on http://localhost:${port} in ${
+            process.env.NODE_ENV
+          }`
+        )
+      })
+};
 if (!isProd) {
     // const webpack = require('webpack');
     const compiler = webpack([configDevClient, configDevServer]);
@@ -23,16 +34,16 @@ if (!isProd) {
     server.use(webpackDevMiddleware);
     server.use(webpackHotMiddleware);
     server.use(webpackHotServerMiddleware(compiler));
+    compiler.plugin("done", done)
 } else {
-    const render = require('../../build/verrdi.server').default;
-    const expressStaticGzip = require('express-static-gzip');
-    server.use(expressStaticGzip('dist', {
-        enableBrotli: true
-    }));
-    server.get('*', render())
+    webpack([configProdClient, configProdServer]).run((err, stats) => {
+        const clientStats = stats.toJson().children[0];
+        const render = require('../../build/verrdi.server').default;
+        const expressStaticGzip = require('express-static-gzip');
+        server.use(expressStaticGzip('dist', {
+            enableBrotli: true
+        }));
+        server.use(render({ clientStats }));
+        done();
+    })
 }
-
-
-server.listen(port, () => {
-    console.log(`server started in ${port}`);
-});

@@ -42,7 +42,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'img/[name]-[hash:8].[ext]',
+                            name: 'img/[name].[ext]',
                             emitFile: false
                         }
                     },
